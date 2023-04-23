@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if past %}
+    {% for thing in past %}
+        <strong>{{thing.question}}</strong><br>
+        {{ thing.answer }}<br><br>
+    {% endfor %}
+
+
+{% endif %}
+
+
+{% endblock %}

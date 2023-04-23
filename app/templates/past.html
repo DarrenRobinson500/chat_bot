@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% for label in labels %}
+    {% if label == user.label %}
+        <a href = "{% url 'label_filter' label.id %}" class="btn btn-primary btn-sm">{{label}}</a>
+    {% else %}
+        <a href = "{% url 'label_filter' label.id %}" class="btn btn-outline-secondary btn-sm">{{label}}</a>
+    {% endif %}
+{% endfor %}
+<hr>
+
+{% if pages %}
+    {% for thing in pages %}
+        <strong>{{thing.question}}</strong> <a href = "{% url 'delete' thing.id %}">Delete</a><br>
+        {{ thing.answer | safe }}<br><br>
+        {% for label in labels %}
+            {% if label == thing.label %}
+                <a href = "{% url 'label_answer' thing.id label.id %}" class="btn btn-primary btn-sm">{{label}}</a>
+            {% else %}
+                <a href = "{% url 'label_answer' thing.id label.id %}" class="btn btn-outline-secondary btn-sm">{{label}}</a>
+            {% endif %}
+        {% endfor %}
+<br>
+
+
+        <br><br>
+
+    {% endfor %}
+{% endif %}
+<hr><br>
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
+
+    <li class="page-item"><a class="page-link" href="?page=1">&laquo; First</a></li>
+    {% if pages.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page={{pages.previous_page_number}}">Previous</a></li>
+    {% endif %}
+
+    {% for i in nums %}
+      <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+    {% endfor %}
+
+    {% if pages.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{pages.next_page_number}}">Next</a></li>
+    {% endif %}
+    <li class="page-item"><a class="page-link" href="?page={{pages.paginator.num_pages}}">Last &raquo; </a></li>
+
+  </ul>
+</nav>
+<br><br>
+<form method=POST action="{% url 'new_label' %}">
+    {% csrf_token %}
+  <div class="mb-3">
+    <input type="text" name="label_name", class="form-control" placeholder="Name new label">
+  </div>
+  <button type="submit" class="btn btn-secondary">New Label</button>
+</form>
+
+
+
+{% endblock %}
